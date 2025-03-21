@@ -2,7 +2,7 @@ import Foundation
 
 class BaseballGame {
     // 게임을 시작하는 함수
-    private func gameStart() {
+    func gameStart() {
         print("||| 숫자 야구게임을 시작하겠습니다! 룰루랄라~ |||")
         play() // 게임 진행 함수 호출
     }
