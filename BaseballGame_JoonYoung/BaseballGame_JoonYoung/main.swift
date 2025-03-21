@@ -23,25 +23,28 @@ class BaseballGame {
         while true { // 정답을 맞출 때까지 무한 반복 실행
             print("숫자를 입력하세요. 입력 범위 1~9 (예시, 253):", terminator: "")
             // 사용자 입력을 받고, 공백을 제거한 후 nil 값 예외 처리
-            guard let userInput = readLine()?.trimmingCharacters(in: .whitespaces) else {
+            guard let userInput = readLine()?.trimmingCharacters(in: .whitespaces), !userInput.isEmpty  else {
                 print("올바르지 않은 입력값입니다.") // 입력값이 nil이면 오류 메시지 출력
                 continue // while 루프의 처음으로 돌아가서 다시 입력받음
             }
-
-            if userInput.count != 3 { // 입력값이 정확히 3자리 숫자가 아닐 경우 예외 처리
-                print("올바르지 않은 입력값입니다. 세자리 숫자를 입력해주세요!")
-                continue
-            }
-            // 문자열을 숫자로 변환 (문자열 → 각 문자 → 정수 배열)
+            // 입력된 문자열을 정수 배열로 변환 (compactMap을 사용하여 변환 실패한 값은 자동 제거)
             let userNumber = userInput.compactMap { Int(String($0)) }
-            // compactMap을 사용하여 변환이 불가능한 문자(예: "a")는 자동으로 제거됨
-            if userNumber.contains(0) {
-                print("0을 입력할 수 없습니다. 다시 입력해주세요!")
+            // compactMap은 변환이 가능한 경우 변환하고, 불가능한 경우(nil) 제거하는 기능을 가짐
+            if userNumber.count != 3 { // 입력값이 3자리 숫자가 아닌 경우 예외 처리
+                print("Error: 올바르지 않은 입력값입니다. 세자리 숫자를 입력해주세요!")
                 continue
             }
 
-            if Set(userNumber).count != 3 { // Set은 중복을 허용하지 않음 → 중복된 숫자가 있으면 count가 줄어듦
-                print("동일한 숫자를 입력할 수 없습니다. 각각 다른 숫자를 입력하세요! ")
+            if Set(userNumber).count != 3 { // 중복된 숫자가 있는 경우 예외 처리
+                print("Error: 동일한 숫자를 입력할 수 없습니다. 각각 다른 숫자를 입력하세요! ")
+                if userNumber.contains(0) {
+                    print("Error: 0을 입력할 수 없습니다. 다시 입력해주세요!")
+                }
+                continue
+            }
+
+            if userNumber.contains(0) { // 입력값에 0이 포함된 경우 예외 처리 (중복과 별도로 체크)
+                print("Error: 0을 입력할 수 없습니다. 다시 입력해주세요!")
                 continue
             }
 
